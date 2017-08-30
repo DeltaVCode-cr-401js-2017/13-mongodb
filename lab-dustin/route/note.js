@@ -14,8 +14,8 @@ router.post('/api/note',jsonParser,function(req,res,next){
     .catch(next);
 });
 
-router.get('/api/note:id',function(req,res,next){
+router.get('/api/note/:id',function(req,res,next){
   Note.findById(req.params.id)
     .then(note => res.json(note))
     .catch(next);
-})
+});

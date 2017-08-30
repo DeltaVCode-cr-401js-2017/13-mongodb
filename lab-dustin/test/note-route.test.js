@@ -22,7 +22,7 @@ describe('note routes',function(){
           .expect(res => {
             expect(res.body.title).to.equal('post note');
             expect(res.body.created).to.not.be.undefined;
-        });
+          });
       });
     });
   });
@@ -35,28 +35,21 @@ describe('note routes',function(){
       });
     });
     describe('with a valid id',function(){
-      /*
-      before(function(done){
-        new Note({title: 'get me', created: new Date()})
+      before(function () {
+        return new Note({ title: 'get me', created: new Date() })
           .save()
-          .then(note => {
-            this.testNote = note;
-            done();
-          }).catch(err => {
-            console.log(err);
-            done(err);
-          });
+          .then(note => this.testNote = note);
       });
-      */
-      after(function(){
+      after(function () {
         return Note.remove({});
       });
+      
       it('should return a note',function(){
         return request.get(`/api/note/${this.testNote._id}`)
           .expect(200)
           .expect(res => {
             expect(res.body.title).to.equal(this.testNote.title);
-        });
+          });
       });
     });
   });

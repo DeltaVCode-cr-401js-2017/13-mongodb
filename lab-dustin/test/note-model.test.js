@@ -8,7 +8,7 @@ mongoose.Promise = Promise;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/401-notes';
 mongoose.connection || mongoose.connection.db || mongoose.connect(MONGODB_URI);
 
-describe.only('note model',function(){
+describe('note model',function(){
   describe('save', function() {
     it('fails when title is missing',function(){
       let note = new Note({});
