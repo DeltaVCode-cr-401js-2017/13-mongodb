@@ -35,7 +35,7 @@ describe('event routes', function () {
     });
   });
 
-  describe('POST /api/note', function(){
+  describe('POST /api/event', function(){
     describe('with no body', function(){
       return request
         .post('api/event')
@@ -45,7 +45,7 @@ describe('event routes', function () {
       after(function () {
         Event.remove({});
       });
-      it('should return a note', function (){
+      it('should return an event', function (){
         return request
           .post('/api/event')
           .send({title: 'test event'})
@@ -57,4 +57,41 @@ describe('event routes', function () {
       });
     });
   });
+
+  describe('PUT /api/event', function(){
+    describe('with no body', function(){
+      it('should return 400 Bad request', function (){
+        return request
+          .put('/api/event/idontcare')
+          .expect(400);
+      });
+    });
+    describe('with a valid body', function(){
+      before(function (){
+        return new Event ({ title: 'uppdate me'})
+        .save()
+        .then(event => this.testEvent = event);
+      });
+      after(function () {
+        Event.remove({});
+      });
+      it('should return an event when sent with valid ID', function (){
+        return request
+          .put(`/api/event/${this.testEvent._id}`)
+          .send({title: 'totes updated',location: 'over there'})
+          .expect(200)
+          .expect(res => {
+            expect(res.body.title).to.equal('totes updated');
+            expect(res.body.location).to.equal('over there');
+            expect(res.body.created).to.not.be.undefined;
+          });
+      });
+      it('should return 404 with invalid ID', function (){
+        return request
+        .put('/api/event/missing')
+        .expect(404);
+      });
+    });
+  });
+
 });
