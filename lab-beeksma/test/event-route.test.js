@@ -94,23 +94,24 @@ describe('event routes', function () {
   describe('DELETE /api/event',function (){
     before(function(){
       return Promise.all([
-        new Event ({ title: 'get me'}).save().then(event => this.removeMe = event)
-        ,new Event ({ title: 'get me'}).save().then(event => this.keepMe = event)
+        new Event ({ title: 'get me'}).save().then(item => this.removeMe = item),
+        new Event ({ title: 'get me'}).save().then(item => this.keepMe = item),
       ]);
     });
     after(function () {
       Event.remove({});
     });
-    it('should return 204', function(){
+    it('should return 204', function() {
+      console.log(this.removeMe);
       return request
         .delete(`/api/event/${this.removeMe._id}`)
         .expect(204)
-        .then( function(){
-          Event.fetchByID(this.keepMe._id);
+        .then( () =>{
+          Event.findById(this.keepMe._id);
         })
-        .then( function(){
-          Event.fetchByID(this.removeMe._id)
-            .then(function(){
+        .then( () =>{
+          Event.findById(this.removeMe._id)
+            .then(() =>{
               expect.fail('not deleted');
             })
             .catch(function(err){

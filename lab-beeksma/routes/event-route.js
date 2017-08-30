@@ -46,3 +46,10 @@ router.put('/api/event/:id', jsonParser, function(req,res,next){
     }
   });
 });
+
+router.delete('/api/event/:id', function(req,res,next){
+  debug('DELETE /api/event');
+  Event.findByIdAndRemove(req.params.id)
+    .then(res.sendStatus(204))
+    .catch(next);
+});
