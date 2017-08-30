@@ -13,3 +13,10 @@ router.get('/api/event/:id', function(req,res,next){
   .then(item => res.json(item))
   .catch(next);
 });
+
+router.post('/api/event', jsonParser, function (req,res,next){
+  debug('POST /api/event');
+  new Event (req.body).save()
+    .then(item => res.json(item))
+    .catch(next);
+});
