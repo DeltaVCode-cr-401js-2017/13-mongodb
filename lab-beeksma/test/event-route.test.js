@@ -91,4 +91,33 @@ describe('event routes', function () {
     });
   });
 
+  describe('DELETE /api/event',function (){
+    before(function(){
+      return Promise.all([
+        new Event ({ title: 'get me'}).save().then(event => this.removeMe = event)
+        ,new Event ({ title: 'get me'}).save().then(event => this.keepMe = event)
+      ]);
+    });
+    after(function () {
+      Event.remove({});
+    });
+    it('should return 204', function(){
+      return request
+        .delete(`/api/event/${this.removeMe._id}`)
+        .expect(204)
+        .then( function(){
+          Event.fetchByID(this.keepMe._id);
+        })
+        .then( function(){
+          Event.fetchByID(this.removeMe._id)
+            .then(function(){
+              expect.fail('not deleted');
+            })
+            .catch(function(err){
+              expect(err.name).to.equal('CastError');
+            });
+        });
+    });
+  });
+
 });
