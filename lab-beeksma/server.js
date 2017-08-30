@@ -14,6 +14,7 @@ mongoose.connection.db || mongoose.connect(MONGODB_URI);
 
 app.use(cors());
 app.use(morgan('dev'));
+app.use(require('./routes/event-route'));
 app.use(require('./lib/error-middleware'));
 
 if (!module.parent){

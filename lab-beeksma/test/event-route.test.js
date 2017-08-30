@@ -3,7 +3,7 @@
 const app = require('../server');
 const request = require('supertest')(app);
 const { expect } = require('chai');
-const Note = require('../model/event');
+const Event = require('../model/event');
 
 describe('event routes', function () {
   describe('GET /api/event', function (){
@@ -16,12 +16,12 @@ describe('event routes', function () {
     });
     describe('with a valid id', function (){
       before(function (){
-        return new Note ({ title: 'get me'})
+        return new Event ({ title: 'get me'})
         .save()
         .then(event => this.testEvent = event);
       });
       after(function () {
-        Note.remove({});
+        Event.remove({});
       });
       it('should return a note', function (){
         return request
