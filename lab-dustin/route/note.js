@@ -14,6 +14,13 @@ router.post('/api/note',jsonParser,function(req,res,next){
     .catch(next);
 });
 
+router.put('/api/note/:id',jsonParser,function(req,res,next){
+  console.log('HITTING PUT REQUEST');
+  Note.findById(req.params.id)
+    .then(note => res.json(note))
+    .catch(next);
+});
+
 router.get('/api/note/:id',function(req,res,next){
   Note.findById(req.params.id)
     .then(note => res.json(note))

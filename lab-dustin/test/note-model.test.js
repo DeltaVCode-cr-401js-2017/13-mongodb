@@ -15,10 +15,9 @@ describe('note model',function(){
 
       return note.save()
         .catch(err => {
-          console.log('la;slkfas')
           expect(err.name).to.equal('ValidationError');
-        })
-    })
+        });
+    });
     it('can be saved',function(){
       let note = new Note({
         title: 'to-do',
@@ -28,7 +27,7 @@ describe('note model',function(){
           console.log(saved);
           expect(saved.title).to.equal('to-do');
           expect(saved.created).to.not.be.undefined;
-      });
+        });
     });
   });
 

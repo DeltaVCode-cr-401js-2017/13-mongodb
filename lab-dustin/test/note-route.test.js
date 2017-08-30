@@ -25,6 +25,14 @@ describe('note routes',function(){
           });
       });
     });
+
+    describe('without a valid body',function(){
+      it('should return 400',function(){
+        return request.post('/api/note')
+        .send()
+        .expect(400);
+      });
+    });
   });
 
   describe('GET /api/note',function(){
@@ -43,13 +51,28 @@ describe('note routes',function(){
       after(function () {
         return Note.remove({});
       });
-      
+
       it('should return a note',function(){
         return request.get(`/api/note/${this.testNote._id}`)
           .expect(200)
           .expect(res => {
             expect(res.body.title).to.equal(this.testNote.title);
           });
+      });
+    });
+  });
+
+  describe('PUT /api/note',function(){
+    describe('with an invalid id',function(){
+      before(function () {
+        return new Note({ title: 'update me', created: new Date() })
+          .save()
+          .then(note => this.testNote = note);
+      });
+      it('should return 400',function(){
+        return request.put('/api/note')
+          .send({title: 'if youre reading this its to late'})
+          .expect(400);
       });
     });
   });

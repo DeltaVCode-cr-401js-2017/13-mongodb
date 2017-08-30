@@ -6,7 +6,7 @@
   "scripts": {
     "test": "cross-env DEBUG=app:* mocha",
     "start": "cross-env DEBUG=app:* nodemon server.js",
-    "test:watch": "cross-env DEBUG=* mocha -w"
+    "test:watch": "cross-env DEBUG=app:* mocha -w"
   },
   "author": "",
   "license": "ISC",
