@@ -48,6 +48,11 @@ describe('userroutes', function (){
           expect(res.body.nickName).to.equal('updated');
         });
     });
+    it('should return 404 if missing id', function(){
+      return request
+        .put('/api/note/missing')
+        .expect(404);
+    });
   });
   describe('GET /api/chat', function(){
     describe('with an invalid id', function() {
@@ -91,7 +96,7 @@ describe('userroutes', function (){
       it('should only delete deleteMe', function(){
         return request
         .delete(`/api/chat/${this.deleteMe._id}`)
-        .expect(204)
+        .expect(204)//not sure why I am not getting a 204
         .expect(res => {
           expect(res.deleteMe.nickName).to.equal(undefined);
         });
