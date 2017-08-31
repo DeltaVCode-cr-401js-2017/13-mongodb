@@ -6,26 +6,26 @@ const debug = require('debug')('app:route');
 
 const router = module.exports = new Router();
 
-router.post('/api/chat', jsonParser, function(req, res, next){
-  debug('POST: /api/chat');
+router.post('/api/user', jsonParser, function(req, res, next){
+  debug('POST: /api/user');
   new User(req.body).save()
     .then(user => res.json(user))
     .catch(err => next(err));
 });
-router.get('/api/chat/:id', jsonParser, function(req, res, next){
-  debug('GET: /api/chat');
+router.get('/api/user/:id', jsonParser, function(req, res, next){
+  debug('GET: /api/user');
   User.findById(req.params.id)
     .then(user => res.json(user))
     .catch(err => next(err));
 });
-router.put('/api/chat/:id', jsonParser, function(req, res, next){
-  debug(`PUT: /api/chat/${req.params.id}`);
+router.put('/api/user/:id', jsonParser, function(req, res, next){
+  debug(`PUT: /api/user/${req.params.id}`);
   User.findByIdAndUpdate(req.params.id, req.body, {new:true})
     .then(user => res.json(user))
     .catch(err => next(err));
 });
-router.delete('/api/chat:id', function(req, res, next){
-  debug('DELETE: /api/chat');
+router.delete('/api/user:id', function(req, res, next){
+  debug('DELETE: /api/user');
 
   User.findByIdAndRemove(req.params.id)
     .then(() => res.sendStatus(204))
