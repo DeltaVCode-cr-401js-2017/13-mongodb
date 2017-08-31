@@ -19,8 +19,8 @@ router.get('/api/chat/:id', jsonParser, function(req, res, next){
     .catch(err => next(err));
 });
 router.put('/api/chat/:id', jsonParser, function(req, res, next){
-  debug('PUT: /api/chat');
-  User.findByIdAndUpdate(req.params.id, req.body)
+  debug(`PUT: /api/chat/${req.params.id}`);
+  User.findByIdAndUpdate(req.params.id, req.body, {new:true})
     .then(user => res.json(user))
     .catch(err => next(err));
 });
