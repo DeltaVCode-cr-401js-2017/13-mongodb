@@ -3,6 +3,7 @@ const request = require('supertest')(app);
 const {expect} = require('chai');
 
 const Room = require('../model/chat-rooms');
+const User = require('../model/user');
 
 describe('roomroutes', function (){
   describe('POST /api/room', function (){
@@ -38,7 +39,7 @@ describe('roomroutes', function (){
     after(function (){
       return Room.remove(this.putRoom);
     });
-    it('should update a note by id', function(){
+    it('should update a room by id', function(){
       return request
         .put(`/api/room/${this.putRoom._id}`)
         .send({roomName:'updated'})
@@ -52,6 +53,34 @@ describe('roomroutes', function (){
       return request
         .put('/api/note/missing')
         .expect(404);
+    });
+  });
+  describe('PUT with a valid id containing notes', function () {
+    before(function () {
+      return new Room({ roomName: 'get me'})
+        .save()
+        .then(room => {
+          this.testRoom = room;
+          return Room.findByIdAndAddUser(room._id, { nickName: 'me too' })
+            .then(user => this.testUser = user);
+        });
+    });
+    after(function () {
+      return Promise.all([
+        Room.remove({}),
+        User.remove({}),
+      ]);
+    });
+    it('should return a list', function () {
+      return request
+        .get(`/api/room/${this.testRoom._id}`)
+        .expect(200)
+        .expect(res => {
+          expect(res.body.roomName).to.equal(this.testRoom.roomName);
+          expect(res.body.users).to.not.be.empty;
+          console.log(res.body);
+          expect(res.body.users[0].nickName).to.equal('me too');
+        });
     });
   });
   describe('GET /api/room', function(){
@@ -74,19 +103,19 @@ describe('roomroutes', function (){
 
       it('should GET a room', function() {
         return request
-        .get(`/api/room/${this.testRoom._id}`)
-        .expect(200)
-        .expect(res => {
-          expect(res.body.roomName).to.equal(this.testRoom.roomName);
-        });
+          .get(`/api/room/${this.testRoom._id}`)
+          .expect(200)
+          .expect(res => {
+            expect(res.body.roomName).to.equal(this.testRoom.roomName);
+          });
       });
     });
   });
   describe('DELETE /api/room', function(){
     describe('deletes a room', function(){
       before(function(){
-        Promise.all([
-          new Room({roomName: 'delete'}).save().then(room => this.deleteMe = room),
+        return Promise.all([
+          new Room({roomName: 'delete'}).save().then(room => console.log(this.deleteMe = room)),
           new Room({roomName: 'save'}).save().then(room => this.saveMe = room)
         ]);
       });
@@ -94,20 +123,21 @@ describe('roomroutes', function (){
         return Room.remove({});
       });
       it('should only delete deleteMe', function(){
+        console.log('deleteMe', this.deleteMe);
+        let deleteMe = `/api/room/${this.deleteMe._id}`;
         return request
-        .delete(`/api/room/${this.deleteMe._id}`)
-        .expect(204)//not sure why I am not getting a 204
-        .expect(res => {
-          expect(res.deleteMe.roomName).to.equal(undefined);
-        });
-      });
-      it('should still have saveMe', function(){
-        return request
-        .get(`/api/room/${this.saveMe._id}`)
-        .expect(200)
-        .expect(res => {
-          expect(res.body.roomName).to.equal(this.saveMe.roomName);
-        });
+          .delete(deleteMe)
+          .expect(204)
+          .then(() => {
+            return Promise.all([
+              request
+                .get(deleteMe)
+                .expect(404),
+              request
+                .get(`/api/room/${this.saveMe._id}`)
+                .expect(200),
+            ]);
+          });
       });
     });
   });

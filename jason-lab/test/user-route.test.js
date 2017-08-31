@@ -74,18 +74,18 @@ describe('userroutes', function (){
 
       it('should GET a user', function() {
         return request
-        .get(`/api/user/${this.testUser._id}`)
-        .expect(200)
-        .expect(res => {
-          expect(res.body.nickName).to.equal(this.testUser.nickName);
-        });
+          .get(`/api/user/${this.testUser._id}`)
+          .expect(200)
+          .expect(res => {
+            expect(res.body.nickName).to.equal(this.testUser.nickName);
+          });
       });
     });
   });
   describe('DELETE /api/user', function(){
     describe('deletes a user', function(){
       before(function(){
-        Promise.all([
+        return Promise.all([
           new User({nickName: 'delete'}).save().then(user => this.deleteMe = user),
           new User({nickName: 'save'}).save().then(user => this.saveMe = user)
         ]);
@@ -94,20 +94,21 @@ describe('userroutes', function (){
         return User.remove({});
       });
       it('should only delete deleteMe', function(){
+        console.log('deleteMe', this.deleteMe);
+        let deleteMe = `/api/user/${this.deleteMe._id}`;
         return request
-        .delete(`/api/user/${this.deleteMe._id}`)
-        .expect(204)//not sure why I am not getting a 204
-        .expect(res => {
-          expect(res.deleteMe.nickName).to.equal(undefined);
-        });
-      });
-      it('should still have saveMe', function(){
-        return request
-        .get(`/api/user/${this.saveMe._id}`)
-        .expect(200)
-        .expect(res => {
-          expect(res.body.nickName).to.equal(this.saveMe.nickName);
-        });
+          .delete(deleteMe)
+          .expect(204)
+          .then(() => {
+            return Promise.all([
+              request
+                .get(deleteMe)
+                .expect(404),
+              request
+                .get(`/api/user/${this.saveMe._id}`)
+                .expect(200),
+            ]);
+          });
       });
     });
   });

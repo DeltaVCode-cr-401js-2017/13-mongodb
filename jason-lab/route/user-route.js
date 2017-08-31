@@ -1,7 +1,7 @@
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const User = require('../model/user');
-const debug = require('debug')('app:route');
+const debug = require('debug')('app:user-route');
 
 
 const router = module.exports = new Router();
@@ -15,6 +15,7 @@ router.post('/api/user', jsonParser, function(req, res, next){
 router.get('/api/user/:id', jsonParser, function(req, res, next){
   debug('GET: /api/user');
   User.findById(req.params.id)
+    .populate('users')
     .then(user => res.json(user))
     .catch(err => next(err));
 });
@@ -24,8 +25,8 @@ router.put('/api/user/:id', jsonParser, function(req, res, next){
     .then(user => res.json(user))
     .catch(err => next(err));
 });
-router.delete('/api/user:id', function(req, res, next){
-  debug('DELETE: /api/user');
+router.delete('/api/user/:id', function(req, res, next){
+  debug(`DELETE: /api/user/${req.params.id}`);
 
   User.findByIdAndRemove(req.params.id)
     .then(() => res.sendStatus(204))

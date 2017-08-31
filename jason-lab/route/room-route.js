@@ -22,11 +22,12 @@ router.get('/api/room/:id', jsonParser, function(req, res, next){
 router.put('/api/room/:id', jsonParser, function(req, res, next){
   debug(`PUT: /api/room/${req.params.id}`);
   Room.findByIdAndUpdate(req.params.id, req.body, {new:true})
+    .populate('users')
     .then(room => res.json(room))
     .catch(err => next(err));
 });
-router.delete('/api/room:id', function(req, res, next){
-  debug('DELETE: /api/room');
+router.delete('/api/room/:id', function(req, res, next){
+  debug('DELETE: /api/room/');
 
   Room.findByIdAndRemove(req.params.id)
     .then(() => res.sendStatus(204))
