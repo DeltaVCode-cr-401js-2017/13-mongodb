@@ -91,6 +91,13 @@ describe('roomroutes', function (){
           .expect(404);
       });
     });
+    describe('with an invalid id-ish', function() {
+      it('should return 404', function(){
+        return request
+          .get('/api/room/deadbeefdeadbeefdeadbeef')
+          .expect(404);
+      });
+    });
     describe('with a valid id', function(){
       before(function(){
         return new Room({ roomName: 'get-me'})
@@ -130,6 +137,8 @@ describe('roomroutes', function (){
           .expect(204)
           .then(() => {
             return Promise.all([
+              Room.findById(this.deleteMe._id.toString().replace('a','b'))
+                .then(deleted => expect(deleted).to.be.null),
               request
                 .get(deleteMe)
                 .expect(404),

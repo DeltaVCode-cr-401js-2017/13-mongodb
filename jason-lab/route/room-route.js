@@ -13,10 +13,13 @@ router.post('/api/room', jsonParser, function(req, res, next){
     .catch(err => next(err));
 });
 router.get('/api/room/:id', jsonParser, function(req, res, next){
-  debug('GET: /api/room');
+  debug(`GET: /api/room/${req.params.id}`);
   Room.findById(req.params.id)
     .populate('users')
-    .then(room => res.json(room))
+    .then(room => {
+      debug(`findById(${req.params.id})`, room);
+      room ? res.json(room) : res.sendStatus(404);
+    })
     .catch(err => next(err));
 });
 router.put('/api/room/:id', jsonParser, function(req, res, next){
