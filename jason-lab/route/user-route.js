@@ -16,7 +16,10 @@ router.get('/api/user/:id', jsonParser, function(req, res, next){
   debug('GET: /api/user');
   User.findById(req.params.id)
     .populate('users')
-    .then(user => res.json(user))
+    .then(room => {
+      debug(`findById(${req.params.id})`, room);
+      room ? res.json(room) : res.sendStatus(404);
+    })
     .catch(err => next(err));
 });
 router.put('/api/user/:id', jsonParser, function(req, res, next){
