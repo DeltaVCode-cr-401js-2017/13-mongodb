@@ -1,0 +1,30 @@
+{
+  "name": "lab-beeksma",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "cross-env DEBUG=app:* mocha",
+    "test:watch": "cross-env DEBUG=app:* mocha -w",
+    "start": "cross-env DEBUG=* node server.js",
+    "lint": "eslint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "cross-env": "^5.0.5",
+    "eslint": "^4.5.0",
+    "mocha": "^3.5.0",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "debug": "^3.0.1",
+    "express": "^4.15.4",
+    "mongoose": "^4.11.9",
+    "morgan": "^1.8.2"
+  }
+}
