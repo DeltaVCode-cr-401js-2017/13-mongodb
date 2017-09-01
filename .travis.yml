@@ -2,6 +2,8 @@ language: node_js
 node_js:
   - "7"
 sudo: required
+services:
+  - mongodb
 script:
   - |
     (for dir in $(find $PWD -maxdepth 2 -name package.json -printf "%h\n"); do
