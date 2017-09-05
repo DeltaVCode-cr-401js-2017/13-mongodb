@@ -6,7 +6,7 @@ const User = require('./user');
 const debug = require('debug')('app:chat-room');
 
 const roomSchema = Schema({
-  roomName: {type: String, required: true},
+  roomName: {type: String},
   roomDescription: {type: String},
   created: {type: Date, required: true, default: Date.now },
   users: [{
@@ -28,7 +28,7 @@ Room.findByIdAndAddUser = function(id, user){
           debug(savedUser);
           room.users.push(savedUser._id);
           return room.save()
-            .then(() => user);
+        .then(() => user);
         });
     });
 };
