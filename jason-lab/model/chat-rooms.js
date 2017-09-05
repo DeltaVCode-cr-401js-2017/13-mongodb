@@ -28,7 +28,7 @@ Room.findByIdAndAddUser = function(id, user){
           debug(savedUser);
           room.users.push(savedUser._id);
           return room.save()
-        .then(() => user);
+            .then(() => user);
         });
     });
 };
