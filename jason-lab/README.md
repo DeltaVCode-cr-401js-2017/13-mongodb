@@ -1,4 +1,4 @@
-## Chat API User DataBase
+## User API User DataBase
 
 This web app allows you to store and edit User information in a mongodb.
 
