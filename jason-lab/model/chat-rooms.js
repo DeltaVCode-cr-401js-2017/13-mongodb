@@ -6,7 +6,7 @@ const User = require('./user');
 const debug = require('debug')('app:chat-room');
 
 const roomSchema = Schema({
-  roomName: {type: String},
+  roomName: {type: String, required: true},
   roomDescription: {type: String},
   created: {type: Date, required: true, default: Date.now },
   users: [{
