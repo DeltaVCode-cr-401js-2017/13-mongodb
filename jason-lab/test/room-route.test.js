@@ -9,7 +9,7 @@ describe('roomroutes', function (){
   describe('POST /api/room', function (){
     describe('with a body', function (){
       after(function (){
-        return Room.remove(this.testRoom);
+        return Room.remove({});
       });
       it('should return a room', function() {
         return request
@@ -55,7 +55,7 @@ describe('roomroutes', function (){
         .expect(404);
     });
   });
-  describe('PUT with a valid id containing notes', function () {
+  describe('GET with a valid id containing notes', function () {
     before(function () {
       return new Room({ roomName: 'get me'})
         .save()
@@ -71,7 +71,7 @@ describe('roomroutes', function (){
         User.remove({}),
       ]);
     });
-    it('should return a list', function () {
+    it('should return a Room', function () {
       return request
         .get(`/api/room/${this.testRoom._id}`)
         .expect(200)
