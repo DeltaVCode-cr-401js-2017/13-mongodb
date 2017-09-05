@@ -38,7 +38,7 @@ describe('userroutes', function (){
     after(function (){
       return User.remove(this.putUser);
     });
-    it('should update a note by id', function(){
+    it('should update a user by id', function(){
       return request
         .put(`/api/user/${this.putUser._id}`)
         .send({nickName:'updated'})
@@ -50,7 +50,7 @@ describe('userroutes', function (){
     });
     it('should return 404 if missing id', function(){
       return request
-        .put('/api/note/missing')
+        .put('/api/user/missing')
         .expect(404);
     });
   });
